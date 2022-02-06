@@ -1,13 +1,13 @@
 package counter;
 
-public class CounterUnsafe implements Counter {
+public class CounterSync implements Counter {
     private int value = 0;
 
-    public void increment() {
+    public synchronized void increment() {
         value += 1;
     }
 
-    public void decrement() {
+    public synchronized void decrement() {
         value -= 1;
     }
 

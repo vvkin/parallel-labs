@@ -1,9 +1,9 @@
 package counter;
 
-public interface CounterLike {
-    int increment();
+public interface Counter {
+    void increment();
 
-    int decrement();
+    void decrement();
 
     int get();
 }
