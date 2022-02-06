@@ -1,20 +1,35 @@
 package writer;
 
 public class CharWriter {
-    private final char chr;
+    private char lastChar = '\0';
 
-    public CharWriter(char chr) {
-        this.chr = chr;
-    }
-
-    public Thread getWriteThread() {
+    public Thread getWriteThread(char chr) {
         return new Thread(() -> {
             try {
-                System.out.print(chr);
-                Thread.sleep(15);
+                writeChar(chr);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
             }
         });
+    }
+
+    public Thread getWriteSyncThread(char chr) {
+        return new Thread(() -> {
+            try {
+                synchronized (this) {
+                    while (chr == lastChar) wait();
+                    writeChar(chr);
+                    notify();
+                }
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    private void writeChar(char chr) throws InterruptedException {
+        System.out.print(chr);
+        lastChar = chr;
+        Thread.sleep(15);
     }
 }
