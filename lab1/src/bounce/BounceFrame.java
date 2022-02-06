@@ -65,13 +65,14 @@ public class BounceFrame extends JFrame {
         joinButton.addActionListener(event -> {
             try {
                 Ball yellowBall = new Ball(canvas, 0, 0, Color.yellow);
+                canvas.addBall(yellowBall);
 
                 for (var thread : ballThreadRunner.getAllThreads()) {
                     if (thread.getPriority() == Thread.MAX_PRIORITY)
                         thread.join();
                 }
 
-                registerBall(yellowBall);
+                ballThreadRunner.startThread(yellowBall, getBallRunnable(yellowBall));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

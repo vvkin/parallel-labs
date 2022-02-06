@@ -12,7 +12,8 @@ public class BallThreadRunner {
     private final Map<Color, Integer> colorPriorityMap = Map.of(
             Color.darkGray, Thread.NORM_PRIORITY,
             Color.blue, Thread.MIN_PRIORITY,
-            Color.red, Thread.MAX_PRIORITY
+            Color.red, Thread.MAX_PRIORITY,
+            Color.yellow, 3
     );
 
     public void removeThread(UUID ballId) {
