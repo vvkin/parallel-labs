@@ -3,10 +3,10 @@ package counter;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class CounterLock implements Counter {
-    private int value = 0;
+public class CounterLock extends Counter {
     private final Lock mutex = new ReentrantLock();
 
+    @Override
     public void increment() {
         mutex.lock();
         try {
@@ -16,6 +16,7 @@ public class CounterLock implements Counter {
         }
     }
 
+    @Override
     public void decrement() {
         mutex.lock();
         try {
@@ -23,9 +24,5 @@ public class CounterLock implements Counter {
         } finally {
             mutex.unlock();
         }
-    }
-
-    public int get() {
-        return value;
     }
 }

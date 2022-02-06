@@ -2,7 +2,7 @@ package bounce;
 
 import javax.swing.*;
 
-public class Bounce {
+public class BounceApp {
     public static void main(String[] args) {
         BounceFrame frame = new BounceFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

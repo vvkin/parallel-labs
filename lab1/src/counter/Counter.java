@@ -1,9 +1,13 @@
 package counter;
 
-public interface Counter {
-    void increment();
+public abstract class Counter {
+    protected int value = 0;
 
-    void decrement();
+    public abstract void increment();
 
-    int get();
+    public abstract void decrement();
+
+    public int get() {
+        return this.value;
+    }
 }

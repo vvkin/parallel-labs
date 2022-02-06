@@ -1,17 +1,13 @@
 package counter;
 
-public class CounterUnsafe implements Counter {
-    private int value = 0;
-
+public class CounterUnsafe extends Counter {
+    @Override
     public void increment() {
         value += 1;
     }
 
+    @Override
     public void decrement() {
         value -= 1;
-    }
-
-    public int get() {
-        return value;
     }
 }

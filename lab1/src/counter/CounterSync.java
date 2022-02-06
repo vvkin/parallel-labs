@@ -1,17 +1,13 @@
 package counter;
 
-public class CounterSync implements Counter {
-    private int value = 0;
-
+public class CounterSync extends Counter {
+    @Override
     public synchronized void increment() {
         value += 1;
     }
 
+    @Override
     public synchronized void decrement() {
         value -= 1;
-    }
-
-    public int get() {
-        return value;
     }
 }
