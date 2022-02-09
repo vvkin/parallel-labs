@@ -1,35 +1,55 @@
 package writer;
 
 public class CharWriter {
-    private char lastChar = '\0';
+    private final int lineWidth;
+    private final int charsToWrite;
 
-    public Thread getWriteThread(char chr) {
-        return new Thread(() -> {
-            try {
-                writeChar(chr);
-            } catch (InterruptedException exception) {
-                exception.printStackTrace();
-            }
-        });
+    private char lastChr = '\0';
+    private int charsPrinted = 0;
+    private boolean stopped = false;
+
+    public CharWriter(int lineWidth, int linesNumber) {
+        this.lineWidth = lineWidth;
+        this.charsToWrite = lineWidth * linesNumber;
     }
 
-    public Thread getWriteSyncThread(char chr) {
-        return new Thread(() -> {
-            try {
-                synchronized (this) {
-                    while (chr == lastChar) wait();
-                    writeChar(chr);
-                    notify();
-                }
-            } catch (InterruptedException exception) {
-                exception.printStackTrace();
-            }
-        });
-    }
-
-    private void writeChar(char chr) throws InterruptedException {
+    private void writeUnsafe(char chr) {
         System.out.print(chr);
-        lastChar = chr;
-        Thread.sleep(15);
+        charsPrinted += 1;
+        lastChr = chr;
+
+        if (charsPrinted % lineWidth == 0) {
+            System.out.print('\n');
+        }
+
+        if (charsPrinted == charsToWrite - 1) {
+            stopped = true;
+        }
+    }
+
+    private synchronized void writeSync(char chr) throws InterruptedException {
+        while (lastChr == chr) wait();
+        writeUnsafe(chr);
+        notifyAll();
+    }
+
+    public Thread getUnsafeWriteThread(char chr) {
+        return new Thread(() -> {
+            while (!stopped) {
+                writeUnsafe(chr);
+            }
+        });
+    }
+
+    public Thread getSyncWriteThread(char chr) {
+        return new Thread(() -> {
+            while (!stopped) {
+                try {
+                    writeSync(chr);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 }

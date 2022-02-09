@@ -20,7 +20,6 @@ public class BallThreadRunner {
         Thread thread = threadsMap.get(ballId);
         if (thread != null) {
             threadsMap.remove(ballId);
-            if (thread.isAlive()) thread.interrupt();
         }
     }
 
