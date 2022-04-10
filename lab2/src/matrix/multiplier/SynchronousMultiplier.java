@@ -2,12 +2,10 @@ package matrix.multiplier;
 
 import matrix.core.SquareMatrix;
 
-import java.util.Optional;
-
 public class SynchronousMultiplier extends Multiplier {
     @Override
-    public Optional<SquareMatrix> multiply(SquareMatrix left, SquareMatrix right) {
-        if (!this.canBeMultiplied(left, right)) return Optional.empty();
+    public SquareMatrix multiply(final SquareMatrix left, final SquareMatrix right) {
+        assertCanBeMultiplied(left, right);
 
         final int size = left.getSize();
         SquareMatrix result = new SquareMatrix(size);
@@ -21,6 +19,6 @@ public class SynchronousMultiplier extends Multiplier {
             }
         }
 
-        return Optional.of(result);
+        return result;
     }
 }

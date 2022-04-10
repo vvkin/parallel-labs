@@ -4,34 +4,37 @@ import matrix.core.SquareMatrix;
 import matrix.multiplier.StripeMultiplier;
 import matrix.multiplier.SynchronousMultiplier;
 
-import java.util.concurrent.ExecutionException;
-
 public class MatrixApp {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        final int size = 100;
+    public static void main(String[] args) {
+        final int size = Integer.parseInt(args[0]);
+        final int threadsNumber = Integer.parseInt(args[1]);
+
+        System.out.println("Size: " + size);
+        System.out.println("Threads: " + threadsNumber);
+        System.out.println("===RESULT===");
 
         var left = SquareMatrix.ofRandom(size);
         var right = SquareMatrix.ofRandom(size);
 
-//        System.out.println(left);
-//        System.out.println();
-//        System.out.println(right);
-//        System.out.println("===RESULT===");
-
+        var stripeMultiplier = new StripeMultiplier(threadsNumber);
         var syncMultiplier = new SynchronousMultiplier();
-        var syncResult = syncMultiplier.multiply(left, right).get();
 
-        var stripeMultiplier = new StripeMultiplier(5);
-        var stripeResult = stripeMultiplier.multiply(left, right).get();
+        // sync
+        long startSync = System.nanoTime();
+        var syncResult = syncMultiplier.multiply(left, right);
+        System.out.println("Sync took: " + (System.nanoTime() - startSync) / 1e9);
 
-        for (int i = 0; i < size; ++i) {
-            for (int j = 0; j < size; ++j) {
-                if (stripeResult.get(i, j) != syncResult.get(i, j)) {
-                    System.out.println("Nope");
-                }
-            }
+        // stripe
+        long startStripe = System.nanoTime();
+        var stripeResult = stripeMultiplier.multiply(left, right);
+        System.out.println("Stripe took: " + (System.nanoTime() - startStripe) / 1e9);
+
+        stripeMultiplier.destroy();
+
+        if (!stripeResult.isEqualTo(syncResult)) {
+            System.out.println("Invalid multiplication result");
+            System.out.println("EXPECTED:\n" + syncResult);
+            System.out.println("\nACTUAL:\n" + stripeResult);
         }
-
-        System.out.println("DONE");
     }
 }
