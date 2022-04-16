@@ -24,7 +24,7 @@ public class SquareMatrix extends Matrix {
 
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
-                instance.set(i, j, rnd.nextInt(50));
+                instance.set(i, j, rnd.nextDouble());
             }
         }
 

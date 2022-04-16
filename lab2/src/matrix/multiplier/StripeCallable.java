@@ -5,7 +5,7 @@ import matrix.core.Pair;
 
 import java.util.concurrent.Callable;
 
-public class StripeCallable implements Callable<Pair<Integer, double[]>> {
+public class StripeCallable implements Callable<Pair<Integer, Matrix>> {
     private final int processIdx;
     private final Matrix rows;
     private final Matrix columns;
@@ -17,7 +17,7 @@ public class StripeCallable implements Callable<Pair<Integer, double[]>> {
     }
 
     @Override
-    public Pair<Integer, double[]> call() {
+    public Pair<Integer, Matrix> call() {
         double[] values = new double[rows.getRowsNumber() * columns.getColumnsNumber()];
         for (int i = 0; i < rows.getRowsNumber(); ++i) {
             for (int j = 0; j < columns.getColumnsNumber(); ++j) {
@@ -26,6 +26,6 @@ public class StripeCallable implements Callable<Pair<Integer, double[]>> {
                 }
             }
         }
-        return new Pair<>(this.processIdx, values);
+        return new Pair<>(this.processIdx, new Matrix(values, rows.getRowsNumber()));
     }
 }

@@ -20,12 +20,12 @@ public class StripeMultiplier extends Multiplier {
         this.threadsNumber = threadsNumber;
     }
 
-    private static Matrix[] getHorizontalStripes(final SquareMatrix matrix, int partitionSize) {
-        int stripesNumber = StripeMultiplier.getStripesNumber(matrix, partitionSize);
+    private static Matrix[] getHorizontalStripes(final SquareMatrix matrix, int stripeSize) {
+        int stripesNumber = StripeMultiplier.getStripesNumber(matrix, stripeSize);
         Matrix[] stripes = new Matrix[stripesNumber];
         for (int i = 0; i < stripesNumber; ++i) {
-            int startRow = i * partitionSize;
-            stripes[i] = matrix.getSubMatrix(startRow, startRow + partitionSize, 0, matrix.getSize());
+            int startRow = i * stripeSize;
+            stripes[i] = matrix.getSubMatrix(startRow, startRow + stripeSize, 0, matrix.getSize());
         }
         return stripes;
     }
@@ -77,19 +77,13 @@ public class StripeMultiplier extends Multiplier {
     private void consumeCallablesByMatrix(SquareMatrix matrix, final StripeCallable[] callables, int iterationIdx) {
         try {
             final int stripeSize = matrix.getSize() / this.threadsNumber;
-            List<Future<Pair<Integer, double[]>>> results = this.threadPool.invokeAll(Arrays.asList(callables));
-
+            List<Future<Pair<Integer, Matrix>>> results = this.threadPool.invokeAll(Arrays.asList(callables));
             for (var result : results) {
-                Pair<Integer, double[]> pair = result.get();
+                Pair<Integer, Matrix> pair = result.get();
                 int rowStart = pair.left() * stripeSize;
                 int columnStart = this.getVerticalIdx(iterationIdx, pair.left()) * stripeSize;
-
-                double[] values = pair.right();
-                for (int i = 0; i < values.length; ++i) {
-                    int rowIdx = rowStart + (i / stripeSize);
-                    int columnIdx = columnStart + (i % stripeSize);
-                    matrix.set(rowIdx, columnIdx, values[i]);
-                }
+                Matrix subMatrix = pair.right();
+                matrix.setSubMatrix(subMatrix, rowStart, columnStart);
             }
         } catch (InterruptedException | ExecutionException exception) {
             exception.printStackTrace();

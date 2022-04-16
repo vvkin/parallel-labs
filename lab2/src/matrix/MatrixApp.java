@@ -16,25 +16,24 @@ public class MatrixApp {
         var left = SquareMatrix.ofRandom(size);
         var right = SquareMatrix.ofRandom(size);
 
-        var stripeMultiplier = new StripeMultiplier(threadsNumber);
         var syncMultiplier = new SynchronousMultiplier();
+        var stripeMultiplier = new StripeMultiplier(threadsNumber);
 
         // sync
         long startSync = System.nanoTime();
         var syncResult = syncMultiplier.multiply(left, right);
-        System.out.println("Sync took: " + (System.nanoTime() - startSync) / 1e9);
+        double syncTime = (System.nanoTime() - startSync);
+        System.out.println("Sync took: " + syncTime / 1e9);
 
         // stripe
         long startStripe = System.nanoTime();
         var stripeResult = stripeMultiplier.multiply(left, right);
-        System.out.println("Stripe took: " + (System.nanoTime() - startStripe) / 1e9);
-
+        double stripeTime = (System.nanoTime() - startStripe);
+        System.out.println("Stripe took: " + (stripeTime) / 1e9 + " | -> " + syncTime / stripeTime);
         stripeMultiplier.destroy();
-
+        
         if (!stripeResult.isEqualTo(syncResult)) {
-            System.out.println("Invalid multiplication result");
-            System.out.println("EXPECTED:\n" + syncResult);
-            System.out.println("\nACTUAL:\n" + stripeResult);
+            System.out.println("STRIPE >>> Invalid multiplication result");
         }
     }
 }
