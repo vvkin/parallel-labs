@@ -14,7 +14,7 @@ public class SynchronousMultiplier extends Multiplier {
             for (int j = 0; j < size; ++j) {
                 for (int k = 0; k < size; ++k) {
                     double value = left.get(i, k) * right.get(k, j);
-                    result.set(i, j, result.get(i, j) + value);
+                    result.add(i, j, value);
                 }
             }
         }

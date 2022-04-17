@@ -1,6 +1,7 @@
 package matrix;
 
 import matrix.core.SquareMatrix;
+import matrix.multiplier.FoxMultiplier;
 import matrix.multiplier.StripeMultiplier;
 import matrix.multiplier.SynchronousMultiplier;
 
@@ -18,6 +19,7 @@ public class MatrixApp {
 
         var syncMultiplier = new SynchronousMultiplier();
         var stripeMultiplier = new StripeMultiplier(threadsNumber);
+        var foxMultiplier = new FoxMultiplier(threadsNumber);
 
         // sync
         long startSync = System.nanoTime();
@@ -31,9 +33,20 @@ public class MatrixApp {
         double stripeTime = (System.nanoTime() - startStripe);
         System.out.println("Stripe took: " + (stripeTime) / 1e9 + " | -> " + syncTime / stripeTime);
         stripeMultiplier.destroy();
-        
+
+        // fox
+        long startFox = System.nanoTime();
+        var foxResult = foxMultiplier.multiply(left, right);
+        double foxTime = (System.nanoTime() - startFox);
+        System.out.println("Fox took: " + (foxTime) / 1e9 + " | -> " + syncTime / foxTime);
+        foxMultiplier.destroy();
+
         if (!stripeResult.isEqualTo(syncResult)) {
             System.out.println("STRIPE >>> Invalid multiplication result");
+        }
+        
+        if (!foxResult.isEqualTo(syncResult)) {
+            System.out.println("FOX >>> Invalid multiplication result");
         }
     }
 }

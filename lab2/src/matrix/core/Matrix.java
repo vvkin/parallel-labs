@@ -4,7 +4,7 @@ public class Matrix {
     protected final double[] data;
     protected final int rowsNumber;
     protected final int columnsNumber;
-    protected static final double EPSILON = 1e12;
+    protected static final double EPSILON = 1e-12;
 
     public Matrix(int rowsNumber, int columnsNumber) {
         this.data = new double[rowsNumber * columnsNumber];
@@ -34,6 +34,10 @@ public class Matrix {
         data[rowIdx * this.columnsNumber + columnIdx] = value;
     }
 
+    public void add(int rowIx, int columnIdx, double value) {
+        this.data[rowIx * this.columnsNumber + columnIdx] += value;
+    }
+
     public int getRowsNumber() {
         return rowsNumber;
     }
@@ -57,11 +61,7 @@ public class Matrix {
             System.arraycopy(subMatrix.data, i * subMatrix.columnsNumber, this.data, thisShift, subMatrix.columnsNumber);
         }
     }
-
-    public double[] getSubMatrixFlat(int rowStart, int rowEnd, int columnStart, int columnEnd) {
-        return this.getSubMatrix(rowStart, rowEnd, columnStart, columnEnd).getData();
-    }
-
+    
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
