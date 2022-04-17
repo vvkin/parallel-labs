@@ -2,7 +2,7 @@ package matrix.multiplier;
 
 import matrix.core.SquareMatrix;
 
-public class SynchronousMultiplier extends Multiplier {
+public class SerialMultiplier extends Multiplier {
     @Override
     public SquareMatrix multiply(final SquareMatrix left, final SquareMatrix right) {
         assertCanBeMultiplied(left, right);

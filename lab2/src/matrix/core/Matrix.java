@@ -4,7 +4,7 @@ public class Matrix {
     protected final double[] data;
     protected final int rowsNumber;
     protected final int columnsNumber;
-    protected static final double EPSILON = 1e-12;
+    protected static final double EPSILON = 1e-8;
 
     public Matrix(int rowsNumber, int columnsNumber) {
         this.data = new double[rowsNumber * columnsNumber];
@@ -61,7 +61,7 @@ public class Matrix {
             System.arraycopy(subMatrix.data, i * subMatrix.columnsNumber, this.data, thisShift, subMatrix.columnsNumber);
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
@@ -85,9 +85,5 @@ public class Matrix {
             }
         }
         return true;
-    }
-
-    public double[] getData() {
-        return this.data;
     }
 }
