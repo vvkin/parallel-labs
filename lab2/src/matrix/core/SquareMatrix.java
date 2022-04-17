@@ -12,12 +12,7 @@ public class SquareMatrix extends Matrix {
         return rowsNumber;
     }
 
-    public static SquareMatrix ofValue(int size, int value) {
-        var instance = new SquareMatrix(size);
-        instance.fill(value);
-        return instance;
-    }
-
+    // returns matrix (size * size) with random double values
     public static SquareMatrix ofRandom(int size) {
         SquareMatrix instance = new SquareMatrix(size);
         Random rnd = new Random();
@@ -28,14 +23,6 @@ public class SquareMatrix extends Matrix {
             }
         }
 
-        return instance;
-    }
-
-    public static SquareMatrix ofSingle(int size) {
-        var instance = new SquareMatrix(size);
-        for (int i = 0; i < size; ++i) {
-            instance.set(i, i, 1);
-        }
         return instance;
     }
 }

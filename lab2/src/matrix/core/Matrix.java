@@ -1,5 +1,9 @@
 package matrix.core;
 
+/*
+ * A class that represents matrix object.
+ * It holds data as one-dimensional array for faster elements access.
+ */
 public class Matrix {
     protected final double[] data;
     protected final int rowsNumber;
@@ -18,14 +22,6 @@ public class Matrix {
         this.columnsNumber = data.length / rowsNumber;
     }
 
-    public void fill(double value) {
-        for (int i = 0; i < rowsNumber; ++i) {
-            for (int j = 0; j < columnsNumber; ++j) {
-                data[i * this.rowsNumber + j] = value;
-            }
-        }
-    }
-
     public double get(int rowIdx, int columnIdx) {
         return data[rowIdx * this.columnsNumber + columnIdx];
     }
@@ -34,6 +30,7 @@ public class Matrix {
         data[rowIdx * this.columnsNumber + columnIdx] = value;
     }
 
+    // adds value to matrix[rowIdx][columnIdx]
     public void add(int rowIx, int columnIdx, double value) {
         this.data[rowIx * this.columnsNumber + columnIdx] += value;
     }
@@ -46,6 +43,7 @@ public class Matrix {
         return columnsNumber;
     }
 
+    // returns sub matrix with indices [rowStart .. rowEnd][columnStart .. columnEnd]
     public Matrix getSubMatrix(int rowStart, int rowEnd, int columnStart, int columnEnd) {
         Matrix subMatrix = new Matrix(rowEnd - rowStart, columnEnd - columnStart);
         for (int i = 0; i < subMatrix.getRowsNumber(); ++i) {
@@ -55,6 +53,8 @@ public class Matrix {
         return subMatrix;
     }
 
+    // sets passed sub matrix to current one from indices
+    // [rowStart .. rowStart + subMatrix.rowsNumber][columnStart .. columnStart + subMatrix.columnsNumber]
     public void setSubMatrix(Matrix subMatrix, int rowStart, int columnStart) {
         for (int i = 0; i < subMatrix.rowsNumber; ++i) {
             int thisShift = (rowStart + i) * this.columnsNumber + columnStart;
@@ -62,6 +62,7 @@ public class Matrix {
         }
     }
 
+    // helper method to get pretty string representation of the matrix
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
@@ -75,6 +76,7 @@ public class Matrix {
         return buffer.toString();
     }
 
+    // checks that current matrix is equal to passed one using EPSILON precision
     public boolean isEqualTo(Matrix other) {
         if (this.rowsNumber != other.rowsNumber || this.columnsNumber != other.columnsNumber) return false;
         for (int i = 0; i < this.rowsNumber; ++i) {

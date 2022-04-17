@@ -2,9 +2,13 @@ package matrix.multiplier;
 
 import matrix.core.SquareMatrix;
 
+/*
+ * Class encapsulating logic of parallel algorithms' efficiency testing
+ */
 public class ExperimentRunner {
     private static final int ITERATIONS = 5;
 
+    // tests Fox algorithm for different number of threads and matrix sizes
     public void testFox() {
         System.out.println("Testing FOX...");
 
@@ -46,6 +50,7 @@ public class ExperimentRunner {
         }
     }
 
+    // tests striped algorithm for different number of threads and matrix sizes
     public void testStripe() {
         System.out.println("Testing STRIPE...");
 

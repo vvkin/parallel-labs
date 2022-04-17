@@ -5,6 +5,11 @@ import matrix.core.Pair;
 
 import java.util.concurrent.Callable;
 
+/*
+ * Class that represents calculation atom in striped algorithm.
+ * It multiplies passed stripes one by one and return result as a matrix.
+ * Resulting matrix size depends on stripe width.
+ */
 public class StripeCallable implements Callable<Pair<Integer, Matrix>> {
     private final int processIdx;
     private final Matrix rows;

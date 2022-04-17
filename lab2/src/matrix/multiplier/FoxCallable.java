@@ -4,6 +4,10 @@ import matrix.core.Matrix;
 
 import java.util.concurrent.Callable;
 
+/*
+ * Class that represents calculation atom in Fox algorithm.
+ * It multiplies passed sub matrices and returns result as matrix.
+ */
 public class FoxCallable implements Callable<Matrix> {
     private final Matrix left;
     private final Matrix right;

@@ -2,6 +2,10 @@ package matrix.multiplier;
 
 import matrix.core.SquareMatrix;
 
+/*
+ * Class representing serial matrix multiplier.
+ * Uses only one thread.
+ */
 public class SerialMultiplier extends Multiplier {
     @Override
     public SquareMatrix multiply(final SquareMatrix left, final SquareMatrix right) {
