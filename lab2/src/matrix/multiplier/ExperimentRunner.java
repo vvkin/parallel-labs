@@ -3,6 +3,8 @@ package matrix.multiplier;
 import matrix.core.SquareMatrix;
 
 public class ExperimentRunner {
+    private static final int ITERATIONS = 5;
+
     public void testFox() {
         System.out.println("Testing FOX...");
 
@@ -22,17 +24,23 @@ public class ExperimentRunner {
             System.out.println("Sync: " + syncTime / 1e9);
 
             for (int threads : threadNumbers) {
-                var foxMultiplier = new FoxMultiplier(threads);
+                double foxTime = 0;
 
-                long startFox = System.nanoTime();
-                var foxResult = foxMultiplier.multiply(left, right);
-                double foxTime = (System.nanoTime() - startFox);
-                System.out.println("Fox(" + threads + "): " + (foxTime) / 1e9 + " | -> " + syncTime / foxTime);
-                foxMultiplier.destroy();
+                for (int i = 0; i < ExperimentRunner.ITERATIONS; ++i) {
+                    var foxMultiplier = new FoxMultiplier(threads);
 
-                if (!foxResult.isEqualTo(syncResult)) {
-                    System.out.println("FOX >>> Invalid multiplication result");
+                    long startFox = System.nanoTime();
+                    var foxResult = foxMultiplier.multiply(left, right);
+                    foxTime += (System.nanoTime() - startFox);
+                    foxMultiplier.destroy();
+
+                    if (!foxResult.isEqualTo(syncResult)) {
+                        System.out.println("FOX >>> Invalid multiplication result");
+                    }
                 }
+
+                foxTime /= ITERATIONS;
+                System.out.println("Fox(" + threads + "): " + (foxTime) / 1e9 + " | -> " + syncTime / foxTime);
             }
             System.out.println();
         }
@@ -57,17 +65,23 @@ public class ExperimentRunner {
             System.out.println("Sync: " + syncTime / 1e9);
 
             for (int threads : threadNumbers) {
-                var stripeMultiplier = new StripeMultiplier(threads);
+                double stripeTime = 0;
 
-                long startStripe = System.nanoTime();
-                var stripeResult = stripeMultiplier.multiply(left, right);
-                double stripeTime = (System.nanoTime() - startStripe);
-                System.out.println("Stripe(" + threads + "): " + (stripeTime) / 1e9 + " | -> " + syncTime / stripeTime);
-                stripeMultiplier.destroy();
+                for (int i = 0; i < ExperimentRunner.ITERATIONS; ++i) {
+                    var stripeMultiplier = new StripeMultiplier(threads);
 
-                if (!stripeResult.isEqualTo(syncResult)) {
-                    System.out.println("STRIPE >>> Invalid multiplication result");
+                    long startStripe = System.nanoTime();
+                    var stripeResult = stripeMultiplier.multiply(left, right);
+                    stripeTime += (System.nanoTime() - startStripe);
+                    stripeMultiplier.destroy();
+
+                    if (!stripeResult.isEqualTo(syncResult)) {
+                        System.out.println("STRIPE >>> Invalid multiplication result");
+                    }
                 }
+
+                stripeTime /= ITERATIONS;
+                System.out.println("Stripe(" + threads + "): " + (stripeTime) / 1e9 + " | -> " + syncTime / stripeTime);
             }
             System.out.println();
         }
