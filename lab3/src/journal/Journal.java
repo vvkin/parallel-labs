@@ -21,9 +21,9 @@ public class Journal {
         return this.groups.get(groupName);
     }
 
-    public void addGrade(String groupName, Integer studentId, int grade) {
+    public void addGrade(String groupName, Integer studentId, int columnIdx, int grade) {
         Group group = this.groups.get(groupName);
-        group.addGrade(studentId, grade);
+        group.setGrade(studentId, columnIdx, grade);
     }
 
     @Override

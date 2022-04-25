@@ -1,6 +1,6 @@
 package journal;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,17 +8,17 @@ import java.util.stream.Collectors;
 
 public class Group {
     private final String name;
-    private final Map<Integer, List<Integer>> studentGrades;
+    private final Map<Integer, int[]> studentGrades;
 
-    public Group(String name, int studentsNumber) {
+    public Group(String name, int studentsNumber, int gradesNumber) {
         this.name = name;
         this.studentGrades = new ConcurrentHashMap<>();
-        this.initStudents(studentsNumber);
+        this.initGrades(studentsNumber, gradesNumber);
     }
 
-    public void initStudents(int studentsNumber) {
+    public void initGrades(int studentsNumber, int gradesNumber) {
         for (int idx = 0; idx < studentsNumber; ++idx) {
-            studentGrades.put(idx, new ArrayList<>());
+            studentGrades.put(idx, new int[gradesNumber]);
         }
     }
 
@@ -26,8 +26,15 @@ public class Group {
         return this.name;
     }
 
-    public void addGrade(Integer studentId, int point) {
-        this.studentGrades.get(studentId).add(point);
+    public void setGrade(Integer studentId, int columnIdx, int grade) {
+        this.studentGrades.get(studentId)[columnIdx] = grade;
+        if (this.studentGrades.get(studentId)[columnIdx] != grade) {
+            throw new RuntimeException("Synchronization problem!");
+        }
+    }
+
+    public int getGrade(Integer studentId, int columnIdx) {
+        return this.studentGrades.get(studentId)[columnIdx];
     }
 
     public Iterable<Integer> getStudents() {
@@ -41,12 +48,14 @@ public class Group {
 
         for (var entry : studentGrades.entrySet()) {
             Integer studentId = entry.getKey();
-            List<Integer> studentGrades = entry.getValue();
+            int[] studentGrades = entry.getValue();
             groupString.append(String.format("%02d: ", studentId));
-            List<String> mappedGrades = studentGrades.stream().map((value) -> String.format("%03d", value)).collect(Collectors.toList());
+            List<String> mappedGrades = Arrays.stream(studentGrades)
+                    .mapToObj((value) -> String.format("%03d", value))
+                    .collect(Collectors.toList());
             groupString.append(mappedGrades).append("\n");
         }
-        
+
         return groupString.toString();
     }
 }

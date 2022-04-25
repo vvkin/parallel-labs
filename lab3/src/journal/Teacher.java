@@ -21,7 +21,7 @@ public class Teacher extends Thread {
                 Group group = journal.getGroup(groupName);
                 for (var student : group.getStudents()) {
                     int grade = ThreadLocalRandom.current().nextInt(0, MAX_GRADE + 1);
-                    journal.addGrade(groupName, student, grade);
+                    journal.addGrade(groupName, student, weekIdx, grade);
                 }
             }
         }
