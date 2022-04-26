@@ -29,12 +29,8 @@ public class Group {
     public void setGrade(Integer studentId, int columnIdx, int grade) {
         this.studentGrades.get(studentId)[columnIdx] = grade;
         if (this.studentGrades.get(studentId)[columnIdx] != grade) {
-            throw new RuntimeException("Synchronization problem!");
+            throw new RuntimeException("Race detected!");
         }
-    }
-
-    public int getGrade(Integer studentId, int columnIdx) {
-        return this.studentGrades.get(studentId)[columnIdx];
     }
 
     public Iterable<Integer> getStudents() {

@@ -4,12 +4,13 @@ import java.util.List;
 
 public class JournalApp {
     public static void main(String[] args) throws InterruptedException {
-        final int WEEKS_NUMBER = 30;
+        final int WEEKS_NUMBER = 10;
+        final int STUDENTS_NUMBER = 10;
 
         Group[] groups = {
-                new Group("IP-91", 10, WEEKS_NUMBER),
-                new Group("IP-92", 10, WEEKS_NUMBER),
-                new Group("IP-93", 10, WEEKS_NUMBER)
+                new Group("IP-91", STUDENTS_NUMBER, WEEKS_NUMBER),
+                new Group("IP-92", STUDENTS_NUMBER, WEEKS_NUMBER),
+                new Group("IP-93", STUDENTS_NUMBER, WEEKS_NUMBER)
         };
         Journal journal = new Journal(groups);
 
